@@ -1,0 +1,74 @@
+.avatar-container {
+    perspective: 1000px;
+    width: 100%; 
+    height: 100%;
+    margin: 0 auto;
+    cursor: pointer;
+  }
+  
+  .avatar {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+  
+  .avatar.flipped {
+    transform: rotateY(180deg);
+  }
+  
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 50%; /* Makes it circular */
+  }
+  
+  .avatar-front {
+    transform: rotateY(0deg);
+  }
+  
+  .avatar-back {
+    transform: rotateY(180deg);
+  }
+  
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .spin-fast {
+    animation: spin 0.15s linear infinite;
+  }
+
+  /* Custom cursor styling */
+.custom-cursor {
+  position: absolute;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  transform: translate(-50%, -150%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+.custom-cursor.visible {
+  opacity: 1;
+}
+
+.aspect-square {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* Ensures a 1:1 aspect ratio */
+}

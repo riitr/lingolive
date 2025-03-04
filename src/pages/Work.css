@@ -1,0 +1,15 @@
+.card {
+    @apply bg-white shadow-xl rounded-2xl p-6 hover:scale-105 hover:shadow-2xl transition-transform;
+  }
+  
+  .heading {
+    @apply text-blue-600 text-2xl font-bold;
+  }
+  
+  .tags {
+    @apply flex flex-wrap gap-2 mt-4;
+  }
+  
+  .tag {
+    @apply  text-indigo-700 px-3 py-1 rounded-full text-sm hover:bg-gray-800 hover:text-white;
+  }
