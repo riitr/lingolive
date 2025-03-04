@@ -1,7 +1,7 @@
-import "./Work.css";
+import "./Conversations.css";
 
 
-const Work = () => {
+const Conversations = () => {
 
   return (
     <div className="bg-gradient-to-br from-white-500 to-red-700 text-white pt-20 pb-10">
@@ -9,7 +9,7 @@ const Work = () => {
       <div className="max-w-4xl mx-auto">
 
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">My Work Experience</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Conversations</h1>
         </div>
 
       </div>
@@ -19,4 +19,4 @@ const Work = () => {
   );
 };
 
-export default Work;
+export default Conversations;

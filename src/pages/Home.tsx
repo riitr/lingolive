@@ -14,12 +14,7 @@ function Home() {
       <div className="bg-gradient-to-b from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-6">
-            <div className="flex-1 space-y-4">
-              Left Content
-            </div>
-            <div className="lg:flex-1 hidden md:block">
-              Right content
-            </div>
+            
           </div>
         </div>
       </div>

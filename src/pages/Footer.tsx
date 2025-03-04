@@ -1,7 +1,7 @@
 import { Github, Instagram, Linkedin, Mail, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import M1 from "./../assets/home/me1.jpg";
+import M1 from "./../assets/home/lingolive.png";
 
 const Footer = () => {
 
@@ -17,19 +17,19 @@ const Footer = () => {
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex items-center space-x-2" onClick={toggleContactDialog} style={{ cursor: 'pointer' }}>
+                        <span className="font-mono font-semibold">Contact with </span>
                             <img
                                 src={M1}
                                 alt="Photo 2"
-                                className="w-10 h-10 avatar-back relative object-cover rounded-full border-2 border-white shadow-lg"
+                                 className="h-5"
                             />
-                            <span className="font-mono font-semibold">cd ~/contact</span>
+                           
                         </div>
-                        <div className="flex items-center space-x-6">
-                            <Link to="/about" className="text-gray-500 hover:text-indigo-600">About</Link>
-                            <Link to="/work" className="text-gray-500 hover:text-indigo-600">Work</Link>
-                            <Link to="/projects" className="text-gray-500 hover:text-indigo-600">Projects</Link>
-                            <Link to="/skills" className="text-gray-500 hover:text-indigo-600">Skills</Link>
-                        </div>
+                        {/* <div className="flex items-center space-x-6">
+                            <Link to="/" className="text-gray-500 hover:text-indigo-600">Home</Link>
+                            <Link to="/conversations" className="text-gray-500 hover:text-indigo-600">Conversations</Link>
+                            <Link to="/account" className="text-gray-500 hover:text-indigo-600">Account</Link>
+                        </div> */}
                         <p className="text-gray-500 text-sm">© {new Date().getFullYear()} Built with ❤️ and lots of ☕️</p>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ const Footer = () => {
                             <X className="w-5 h-5" />
                         </button>
                         <h2 className="text-lg font-bold mb-4 text-center">
-                            "Ah, you've clicked my face! 😎"
+                            Contact LingoLive
                         </h2>
                         <p className="text-sm text-gray-600 text-center mb-4">
                             Here are my secret links. Feel free to stalk... professionally, of

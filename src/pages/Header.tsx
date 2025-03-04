@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import M1 from "./../assets/home/me1.jpg";
+import Logo from "./../assets/home/lingolive.png";
 import { Github, Instagram, Linkedin, Mail } from 'lucide-react';
+import { User } from 'firebase/auth';
 
 
 function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
@@ -22,7 +23,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
 }
 
 
-const Header = () => {
+const Header: React.FC<{ user:  User | null }> = ({ user }) => {
 
 
     return (
@@ -36,16 +37,13 @@ const Header = () => {
                             <Link to="/">
                                 <div
                                     className="flex items-center space-x-2"
-                                    style={{ cursor: "pointer" }}
+                                    style={{ cursor: "pointer", padding: '18px' }}
                                 >
                                     <img
-                                        src={M1}
+                                        src={Logo}
                                         alt="Photo 2"
-                                        className="w-10 h-10 avatar-back relative object-cover rounded-full border-2 border-white shadow-lg"
+                                        className="h-7"
                                     />
-                                    <Link to="/" className="font-mono text-lg font-semibold">
-                                        "{'Name of project'}"
-                                    </Link>
                                 </div>
                             </Link>
 
@@ -88,10 +86,9 @@ const Header = () => {
 
                         {/* Navigation Links */}
                         <div className="flex flex-wrap justify-center md:justify-start space-x-2 md:space-x-6">
-                            <NavLink to="/about">About Me</NavLink>
-                            <NavLink to="/work">Work</NavLink>
-                            <NavLink to="/projects">Projects</NavLink>
-                            <NavLink to="/skills">Skills</NavLink>
+                            <NavLink to="/">Home</NavLink>
+                            <NavLink to="/conversations">Conversations</NavLink>
+                            <NavLink to="/account">{user ?  <img src={user?.photoURL || "https://via.placeholder.com/150"} alt="User Profile" className="w-8 h-8 rounded-full mx-auto mb-4" />  : 'Account'}</NavLink>
                         </div>
 
                         {/* Social Icons on Desktop */}
