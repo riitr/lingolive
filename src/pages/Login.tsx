@@ -28,8 +28,7 @@ const Login: React.FC = () => {
   return (
     <main>
 
-<div className="bg-gradient-to-b from-gray-50 to-gray-100 py-16 px-4 sm:px-6 lg:px-8">
-<div className="max-w-4xl mx-auto">
+<div className="flex items-center justify-center mt-24 bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg text-center w-96">
         <h1 className="text-2xl font-bold mb-6">Login to LingoLive</h1>
         <button
@@ -44,9 +43,8 @@ const Login: React.FC = () => {
         >
           Sign in with Apple
         </button>
-          </div>
-          </div>
       </div>
+    </div>
     </main>
   );
 }

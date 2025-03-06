@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { Navigate, redirect, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Footer from './pages/Footer';
 import Header from './pages/Header';
-import Home from './pages/Home';
 
 import firebaseApp from "../firebaseConfig";
 import Account from './pages/Account';
 import Conversations from './pages/Conversations';
 import Login from "./pages/Login";
+import WebRTC from "./pages/WebRTC";
 
 const auth = getAuth(firebaseApp);
 
@@ -44,7 +44,7 @@ const App: React.FC = () => {
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
           <Route path="/conversations" element={user ? <Conversations /> : <Navigate to="/login" replace />} />
           <Route path="/account" element={user ? <Account user={user} onLogout={handleLogout}/> : <Navigate to="/login" replace />} />
-          <Route path="/" element={user ? <Home  /> : <Navigate to="/login" replace />} />
+          <Route path="/" element={user ? <WebRTC  /> : <Navigate to="/login" replace />} />
         </Routes>
 
         <Footer />
