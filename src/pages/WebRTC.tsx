@@ -16,6 +16,8 @@ const WebRTC: React.FC = () => {
     const [isCallActive, setIsCallActive] = useState(false);
     const [statusMessage, setStatusMessage] = useState<string>("");
     const [recipientSocketId, setRecipientSocketId] = useState<string | null>(null);
+    const pendingCandidates = useRef<RTCIceCandidateInit[]>([]); // Store ICE candidates temporarily
+
 
 
     useEffect(() => {
@@ -34,56 +36,55 @@ const WebRTC: React.FC = () => {
                 setStatusMessage("Connected to signaling server.");
             });
 
-            newSocket.on("user-joined", (data: { userId: string; socketId: string, participants: string[] }) => {
-                console.log(`User ${data.userId} (Socket: ${data.socketId}) joined the meeting.`);
-                console.log('participants: ', data.participants)
-
-                const otherParticipants = data.participants.filter(id => id !== socketRef.current.id);
-                if (otherParticipants.length > 0) {
-                  setRecipientSocketId(otherParticipants[0]);  // Store the other peer's socket ID
-                  console.log(`📡 Setting recipient socket ID: ${otherParticipants[0]}`);
+            newSocket.on("user-joined", (data: { userId: string; socketId: string }) => {
+                console.log(`👤 User ${data.userId} (Socket: ${data.socketId}) joined.`);
+                
+                if (data.socketId !== socketRef.current.id) {
+                  console.log(`✅ Setting recipient ID to ${data.socketId}`);
+                  setRecipientSocketId(data.socketId);  // Store recipient’s socket ID
                 }
-            });
+              });
 
             newSocket.on("signal", async (data: any) => {
-                if (!peerConnectionRef.current) return;
-
                 console.log("🔽 Received Signal: ", data);
-
+              
+                if (!peerConnectionRef.current) return;
+              
                 if (data.sdp) {
-                    const remoteDesc = new RTCSessionDescription(data.sdp);
-
-                    if (data.sdp.type === "offer") {
-                        if (!peerConnectionRef.current.remoteDescription) {
-                            await peerConnectionRef.current.setRemoteDescription(remoteDesc);
-                            console.log("✅ Remote SDP Set:", remoteDesc);
-
-                            const answer = await peerConnectionRef.current.createAnswer();
-                            await peerConnectionRef.current.setLocalDescription(answer);
-                            newSocket.emit("signal", { sdp: answer, to: recipientSocketId, from: socketRef.current.id });
-                        }
-                    } else if (data.sdp.type === "answer") {
-                        if (!peerConnectionRef.current.currentRemoteDescription) {
-                            await peerConnectionRef.current.setRemoteDescription(remoteDesc);
-                            console.log("✅ Answer SDP Set:", remoteDesc);
-                        }
+                  console.log("✅ Remote SDP Set: ", data.sdp);
+                  await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(data.sdp));
+              
+                  // Process pending ICE candidates
+                  pendingCandidates.current.forEach(async (candidate) => {
+                    try {
+                      await peerConnectionRef.current?.addIceCandidate(new RTCIceCandidate(candidate));
+                      console.log("✅ Buffered ICE Candidate added:", candidate);
+                    } catch (err) {
+                      console.error("⚠️ Error adding buffered ICE candidate:", err);
                     }
-                } else if (data.candidate) {
-                    if (!peerConnectionRef.current.remoteDescription) {
-                      console.warn("⚠️ ICE Candidate received before SDP. Storing candidate...");
-                      setTimeout(() => {
-                        peerConnectionRef.current?.addIceCandidate(new RTCIceCandidate(data.candidate))
-                          .then(() => console.log("✅ ICE Candidate added"))
-                          .catch((err) => console.error("⚠️ Error adding ICE candidate:", err));
-                      }, 1000); // Delay to ensure remote description is set
-                    } else {
-                      console.log("✅ Adding ICE Candidate: ", data.candidate);
-                      peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(data.candidate))
-                        .then(() => console.log("✅ ICE Candidate added"))
-                        .catch((err) => console.error("⚠️ Error adding ICE candidate:", err));
+                  });
+                  pendingCandidates.current = []; // Clear the buffer
+              
+                  if (data.sdp.type === "offer") {
+                    const answer = await peerConnectionRef.current.createAnswer();
+                    await peerConnectionRef.current.setLocalDescription(answer);
+                    socketRef.current.emit("signal", { sdp: answer, to: data.from, from: socketRef.current.id });
+                  }
+                } 
+                else if (data.candidate) {
+                  if (!peerConnectionRef.current.remoteDescription) {
+                    console.warn("⚠️ ICE Candidate received before SDP. Storing...");
+                    pendingCandidates.current.push(data.candidate); // Store ICE candidate
+                  } else {
+                    try {
+                      await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(data.candidate));
+                      console.log("✅ ICE Candidate added:", data.candidate);
+                    } catch (err) {
+                      console.error("⚠️ Error adding ICE candidate:", err);
                     }
                   }
-                });
+                }
+              });
 
         }
         return () => {
